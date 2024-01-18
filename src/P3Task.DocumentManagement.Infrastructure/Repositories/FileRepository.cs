@@ -23,19 +23,15 @@ public class FileRepository
         return file;
     }
 
-    public async Task<FileItem> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+    public async Task<FileItem?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        var file = await _dbContext.Files.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
-
-        if (file is null)
-            throw new KeyNotFoundException();
-
-        return file;
+        return await _dbContext.Files.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
     }
 
     public async Task<List<FileItem>> GetByNameAsync(string name, Guid? folderId, CancellationToken cancellationToken)
     {
         var filesQuery = _dbContext.Files.Where(x => x.Name == name);
+        
         
         if (folderId is not null)
             filesQuery = filesQuery.Where(x => x.FolderId == folderId);
@@ -48,7 +44,7 @@ public class FileRepository
         return await _dbContext.Files.Where(x => x.Name.StartsWith(search)).Take(10).ToListAsync(cancellationToken);
     }
 
-    public async Task DeleteFileAsync(Guid id, CancellationToken cancellationToken)
+    public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
     {
         var file = new FileItem() { Id = id };
         _dbContext.Files.Attach(file);

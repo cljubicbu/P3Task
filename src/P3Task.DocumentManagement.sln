@@ -10,6 +10,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentatio
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Application", "Application", "{625C5FDF-6E57-4570-850E-8B615351E053}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "P3Task.DocumentManagement.Application", "P3Task.DocumentManagement.Application\P3Task.DocumentManagement.Application.csproj", "{BC5FE9F8-A1AC-454B-9FDF-16560213E61B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -28,5 +30,12 @@ Global
 		{928D08F2-FB3B-4D97-87F8-027644EE411B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{928D08F2-FB3B-4D97-87F8-027644EE411B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{928D08F2-FB3B-4D97-87F8-027644EE411B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC5FE9F8-A1AC-454B-9FDF-16560213E61B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC5FE9F8-A1AC-454B-9FDF-16560213E61B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC5FE9F8-A1AC-454B-9FDF-16560213E61B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC5FE9F8-A1AC-454B-9FDF-16560213E61B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{BC5FE9F8-A1AC-454B-9FDF-16560213E61B} = {625C5FDF-6E57-4570-850E-8B615351E053}
 	EndGlobalSection
 EndGlobal

@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+option csharp_namespace = "P3Task.DocumentManagement.Grpc";
+
+package file;
+
+service FileService {
+  rpc CreateFile (CreateFileRequest) returns (CreateFileResponse);
+}
+
+message CreateFileRequest{
+  string name = 1;
+}
+
+message CreateFileResponse{
+  string id = 1;
+}
