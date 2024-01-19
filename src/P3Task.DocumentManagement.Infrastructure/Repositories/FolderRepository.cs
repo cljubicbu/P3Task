@@ -1,10 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using P3Task.DocumentManagement.Core.Entities;
+using P3Task.DocumentManagement.Core.Interfaces;
 using P3Task.DocumentManagement.Repository.Database;
 
 namespace P3Task.DocumentManagement.Repository.Repositories;
 
-public class FolderRepository
+public class FolderRepository : IFolderRepository
 {
     private readonly DocumentManagementDbContext _dbContext;
 
@@ -30,7 +31,7 @@ public class FolderRepository
             .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
     }
 
-    public async Task DeleteFolderAsync(Guid id, CancellationToken cancellationToken)
+    public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
     {
         var folder = new Folder() { Id = id };
 

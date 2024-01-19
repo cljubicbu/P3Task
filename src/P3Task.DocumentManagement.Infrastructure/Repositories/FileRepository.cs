@@ -1,10 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using P3Task.DocumentManagement.Core.Entities;
+using P3Task.DocumentManagement.Core.Interfaces;
 using P3Task.DocumentManagement.Repository.Database;
 
 namespace P3Task.DocumentManagement.Repository.Repositories;
 
-public class FileRepository
+public class FileRepository : IFileRepository
 {
     private readonly DocumentManagementDbContext _dbContext;
 
@@ -31,8 +32,7 @@ public class FileRepository
     public async Task<List<FileItem>> GetByNameAsync(string name, Guid? folderId, CancellationToken cancellationToken)
     {
         var filesQuery = _dbContext.Files.Where(x => x.Name == name);
-
-
+        
         if (folderId is not null)
             filesQuery = filesQuery.Where(x => x.FolderId == folderId);
 

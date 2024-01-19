@@ -6,11 +6,19 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "P3Task.DocumentManagement.C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "P3Task.DocumentManagement.Infrastructure", "P3Task.DocumentManagement.Infrastructure\P3Task.DocumentManagement.Infrastructure.csproj", "{928D08F2-FB3B-4D97-87F8-027644EE411B}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{8C05733A-2D81-43F8-9706-EF972251F494}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{625C5FDF-6E57-4570-850E-8B615351E053}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Application", "Application", "{625C5FDF-6E57-4570-850E-8B615351E053}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "P3Task.DocumentManagement.Services", "P3Task.DocumentManagement.Services\P3Task.DocumentManagement.Services.csproj", "{BC5FE9F8-A1AC-454B-9FDF-16560213E61B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "P3Task.DocumentManagement.Application", "P3Task.DocumentManagement.Application\P3Task.DocumentManagement.Application.csproj", "{BC5FE9F8-A1AC-454B-9FDF-16560213E61B}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain", "Domain", "{EE987E95-0186-4850-A543-194E04211F68}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{A64D9FF6-0189-42A8-BD0F-823F24626965}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WebApps", "WebApps", "{9A30B7CF-7683-491F-857E-9CBAA1E8C33B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{4B91005B-7EE1-4E90-BFF0-E51881521FEF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "P3Task.DocumentManagement.Services.Tests", "P3Task.DocumentManagement.Services.Tests\P3Task.DocumentManagement.Services.Tests.csproj", "{3EFBB041-F371-4EE1-A618-9D2DC8AE85F1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -34,8 +42,17 @@ Global
 		{BC5FE9F8-A1AC-454B-9FDF-16560213E61B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BC5FE9F8-A1AC-454B-9FDF-16560213E61B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BC5FE9F8-A1AC-454B-9FDF-16560213E61B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3EFBB041-F371-4EE1-A618-9D2DC8AE85F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3EFBB041-F371-4EE1-A618-9D2DC8AE85F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3EFBB041-F371-4EE1-A618-9D2DC8AE85F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3EFBB041-F371-4EE1-A618-9D2DC8AE85F1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{BC5FE9F8-A1AC-454B-9FDF-16560213E61B} = {625C5FDF-6E57-4570-850E-8B615351E053}
+		{928D08F2-FB3B-4D97-87F8-027644EE411B} = {A64D9FF6-0189-42A8-BD0F-823F24626965}
+		{87BF5F37-46B1-433A-B27E-111C6DB6400C} = {EE987E95-0186-4850-A543-194E04211F68}
+		{59243B08-AACB-40BF-8166-7AFB8EE5EB5E} = {9A30B7CF-7683-491F-857E-9CBAA1E8C33B}
+		{4B91005B-7EE1-4E90-BFF0-E51881521FEF} = {625C5FDF-6E57-4570-850E-8B615351E053}
+		{3EFBB041-F371-4EE1-A618-9D2DC8AE85F1} = {4B91005B-7EE1-4E90-BFF0-E51881521FEF}
 	EndGlobalSection
 EndGlobal

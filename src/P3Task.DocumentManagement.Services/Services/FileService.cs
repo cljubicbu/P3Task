@@ -1,17 +1,17 @@
 using Microsoft.Extensions.Logging;
 using P3Task.DocumentManagement.Core.Entities;
-using P3Task.DocumentManagement.Repository.Repositories;
+using P3Task.DocumentManagement.Core.Interfaces;
 
 namespace P3Task.DocumentManagement.Application.Services;
 
 public class FileService
 {
-    private readonly FileRepository _fileRepository;
+    private readonly IFileRepository _fileRepository;
     private readonly ILogger<FileService> _logger;
 
     public FileService(
         ILogger<FileService> logger,
-        FileRepository fileRepository)
+        IFileRepository fileRepository)
     {
         _logger = logger;
         _fileRepository = fileRepository;

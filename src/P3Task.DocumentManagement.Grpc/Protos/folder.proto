@@ -4,7 +4,7 @@ import "google/protobuf/empty.proto";
 
 option csharp_namespace = "P3Task.DocumentManagement.Grpc";
 
-package folder;
+package file;
 
 // folder service definition
 service FolderService {
@@ -28,7 +28,7 @@ message DeleteFolderRequest {
   string id = 1;
 }
 
-// definition of folder used in response messages
+// definition of folder that is used in response messages
 message Folder {
   string id = 1;
   string name = 2;

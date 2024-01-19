@@ -16,14 +16,13 @@
           <Generator>MSBuild:Compile</Generator>
         </Protobuf>
         <Protobuf Include="Protos\folder.proto">
-          <GrpcServices>Server</GrpcServices>
-          <Access>Public</Access>
-          <ProtoCompile>True</ProtoCompile>
-          <CompileOutputs>True</CompileOutputs>
-          <OutputDir>obj/Debug/net8.0/</OutputDir>
-          <Generator>MSBuild:Compile</Generator>
+            <GrpcServices>Server</GrpcServices>
+            <Access>Public</Access>
+            <ProtoCompile>True</ProtoCompile>
+            <CompileOutputs>True</CompileOutputs>
+            <OutputDir>obj\Debug/net8.0/</OutputDir>
+            <Generator>MSBuild:Compile</Generator>
         </Protobuf>
-        <Protobuf Include="Protos\greet.proto" GrpcServices="Server"/>
     </ItemGroup>
 
     <ItemGroup>
@@ -31,7 +30,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\P3Task.DocumentManagement.Application\P3Task.DocumentManagement.Application.csproj" />
+      <ProjectReference Include="..\P3Task.DocumentManagement.Services\P3Task.DocumentManagement.Services.csproj" />
     </ItemGroup>
 
 </Project>

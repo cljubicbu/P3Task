@@ -1,30 +1,20 @@
 using Microsoft.Extensions.Logging;
 using P3Task.DocumentManagement.Core.Entities;
-using P3Task.DocumentManagement.Repository.Repositories;
+using P3Task.DocumentManagement.Core.Interfaces;
 
 namespace P3Task.DocumentManagement.Application.Services;
 
 public class FolderService
 {
     private readonly ILogger<FolderService> _logger;
-    private readonly FolderRepository _folderRepository;
+    private readonly IFolderRepository _folderRepository;
     
     public FolderService(
         ILogger<FolderService> logger,
-        FolderRepository folderRepository)
+        IFolderRepository folderRepository)
     {
         _logger = logger;
         _folderRepository = folderRepository;
-    }
-
-    public async Task<Folder> GetByIdAsync(Guid id, CancellationToken cancellationToken)
-    {
-        var folder = await _folderRepository.GetByIdAsync(id, cancellationToken);
-
-        if (folder is null)
-            throw new KeyNotFoundException();
-
-        return folder;
     }
     
     public async Task<Folder> AddAsync(Folder folder, CancellationToken cancellationToken)
@@ -45,6 +35,6 @@ public class FolderService
 
         await Task.WhenAll(deleteFolderTasks);
 
-        await _folderRepository.DeleteFolderAsync(id, cancellationToken);
+        await _folderRepository.DeleteAsync(id, cancellationToken);
     }
 }
