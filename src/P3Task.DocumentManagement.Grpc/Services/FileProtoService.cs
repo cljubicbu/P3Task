@@ -1,5 +1,6 @@
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
+using P3Task.DocumentManagement.Application.Interfaces;
 using P3Task.DocumentManagement.Core.Entities;
 using P3Task.DocumentManagement.Core.Helpers;
 
@@ -7,11 +8,11 @@ namespace P3Task.DocumentManagement.Grpc.Services;
 
 public class FileProtoService : FileService.FileServiceBase
 {
-    private readonly Application.Services.FileService _fileService;
+    private readonly IFileService _fileService;
     private readonly ILogger<FileProtoService> _logger;
 
     public FileProtoService(ILogger<FileProtoService> logger,
-        Application.Services.FileService fileService)
+        IFileService fileService)
     {
         _logger = logger;
         _fileService = fileService;
@@ -19,11 +20,11 @@ public class FileProtoService : FileService.FileServiceBase
 
     public override async Task<CreateFileResponse> CreateFile(CreateFileRequest request, ServerCallContext context)
     {
-        var folderId = Guid.Empty;
-        if (!string.IsNullOrEmpty(request.FolderId) && Guid.TryParse(request.FolderId, out folderId) == false)
+        Guid? folderId = null;
+        if (!string.IsNullOrEmpty(request.FolderId) && NullableHelper.TryParseNullable(request.FolderId, out folderId, Guid.TryParse) == false)
             throw new ArgumentException("FolderId should be a valid guid");
 
-        var resp = await _fileService.AddAsync(new FileItem { Name = request.Name, FolderId = folderId },
+        var resp = await _fileService.AddAsync(new Core.Entities.File { Name = request.Name, FolderId = folderId },
             context.CancellationToken);
         
         return new CreateFileResponse
@@ -47,7 +48,7 @@ public class FileProtoService : FileService.FileServiceBase
 
         return new GetFilesByNameResponse
         {
-            Files = { files.Select(x => new File { Id = x.Id.ToString(), Name = x.Name }).ToList() }
+            Files = { files.Select(x => new File { Id = x.Id.ToString(), Name = x.Name, FolderId = x.FolderId?.ToString() ?? string.Empty }).ToList() }
         };
     }
 
@@ -57,7 +58,7 @@ public class FileProtoService : FileService.FileServiceBase
 
         return new SearchFilesResponse
         {
-            Files = { files.Select(x => new File { Id = x.Id.ToString(), Name = x.Name }).ToList() }
+            Files = { files.Select(x => new File { Id = x.Id.ToString(), Name = x.Name, FolderId = x.FolderId?.ToString() ?? string.Empty }).ToList() }
         };
     }
 
@@ -66,7 +67,7 @@ public class FileProtoService : FileService.FileServiceBase
         if (Guid.TryParse(request.Id, out var fileId) == false)
             throw new ArgumentException("File id should be a valid guid");
 
-        await _fileService.DeleteFile(fileId, context.CancellationToken);
+        await _fileService.DeleteAsync(fileId, context.CancellationToken);
 
         return new Empty();
     }

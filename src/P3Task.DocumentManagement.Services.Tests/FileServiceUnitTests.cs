@@ -1,8 +1,11 @@
+using System.Data;
+using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Moq;
 using P3Task.DocumentManagement.Application.Services;
 using P3Task.DocumentManagement.Core.Entities;
 using P3Task.DocumentManagement.Core.Interfaces;
+using File = P3Task.DocumentManagement.Core.Entities.File;
 
 namespace P3Task.DocumentManagement.Services.Tests;
 
@@ -23,36 +26,91 @@ public class FileServiceUnitTests
         _mockedFileRepository = new Mock<IFileRepository>();
 
         _mockedFileRepository.Setup(x => x.GetByIdAsync(_fileId, _cancellationToken))
-            .ReturnsAsync(new FileItem { Id = _fileId, Name = _fileName, FolderId = _folderId });
-
+            .ReturnsAsync(new File { Id = _fileId, Name = _fileName, FolderId = _folderId });
     }
 
     private FileService GetService()
     {
         return new FileService(_mockedLogger.Object, _mockedFileRepository.Object);
     }
+    
+    [Test]
+    public async Task Create_ShouldReturnCreatedFile()
+    {
+        // arrange
+        var fileItem = new File()
+        {
+            Id = _fileId,
+            Name = _fileName,
+            FolderId = _folderId
+        };
+        _mockedFileRepository.Setup(x => x.GetByNameAsync(_fileName, _folderId, _cancellationToken))
+            .ReturnsAsync([]);
+        
+        _mockedFileRepository.Setup(x => x.AddAsync(fileItem, _cancellationToken))
+            .ReturnsAsync(fileItem);
+        
+        var service = GetService();
+        
+        // act
+        var response = await service.AddAsync(fileItem, _cancellationToken);
 
+        // assert
+        response.Should().NotBeNull();
+        response.Id.Should().Be(_fileId);
+        response.Name.Should().Be(_fileName);
+        response.FolderId.Should().Be(_folderId);
+    }
+    
+    [Test]
+    public async Task Create_ShouldThrowDuplicateNameException()
+    {
+        // arrange
+        var fileItem = new File()
+        {
+            Id = _fileId,
+            Name = _fileName,
+            FolderId = _folderId
+        };
+        _mockedFileRepository.Setup(x => x.GetByNameAsync(_fileName, _folderId, _cancellationToken))
+            .ReturnsAsync([fileItem]);
+        
+        _mockedFileRepository.Setup(x => x.AddAsync(fileItem, _cancellationToken))
+            .ReturnsAsync(fileItem);
+        
+        var service = GetService();
+        
+        // act and assert
+        var act = async () => { await service.AddAsync(fileItem, _cancellationToken); };
+        await act.Should().ThrowAsync<DuplicateNameException>();
+    }
+    
     [Test]
     public async Task GetById_ShouldReturnFile()
     {
+        // arrange
+        var service = GetService();
+        
         // act
-        var response = await GetService().GetByIdAsync(_fileId, _cancellationToken);
+        var response = await service.GetByIdAsync(_fileId, _cancellationToken);
 
         // assert
-        Assert.IsNotNull(response);
-        Assert.That(response.Id, Is.EqualTo(_fileId));
-        Assert.That(response.Name, Is.EqualTo(_fileName));
-        Assert.That(response.FolderId, Is.EqualTo(_folderId));
+        response.Should().NotBeNull();
+        response.Id.Should().Be(_fileId);
+        response.Name.Should().Be(_fileName);
+        response.FolderId.Should().Be(_folderId);
     }
 
     [Test]
-    public void GetById_ShouldThrowKeyNotFoundException()
+    public async Task GetById_ShouldThrowKeyNotFoundException()
     {
         // arrange
         var nonSetupGuid = Guid.NewGuid();
-
+        var service = GetService();
+        
         // act and assert
-        Assert.ThrowsAsync<KeyNotFoundException>(() => GetService().GetByIdAsync(nonSetupGuid, _cancellationToken));
+        var act = async () => { await service.GetByIdAsync(nonSetupGuid, _cancellationToken); };
+        await act.Should().ThrowAsync<KeyNotFoundException>();
     }
 
     [Test]
@@ -60,17 +118,19 @@ public class FileServiceUnitTests
     {
         // arrange
         _mockedFileRepository.Setup(x => x.GetByNameAsync(_fileName, _folderId, _cancellationToken))
-            .ReturnsAsync([new FileItem { Id = _fileId, Name = _fileName, FolderId = _folderId }]);
-
+            .ReturnsAsync([new File { Id = _fileId, Name = _fileName, FolderId = _folderId }]);
+        
+        var service = GetService();
+        
         // act
-        var response = await GetService().GetByNameAsync(_fileName, _folderId, _cancellationToken);
+        var response = await service.GetByNameAsync(_fileName, _folderId, _cancellationToken);
 
         // assert
-        Assert.That(response, Is.Not.Null);
-        Assert.That(response.Count, Is.EqualTo(1));
-        Assert.That(response[0].Id, Is.EqualTo(_fileId));
-        Assert.That(response[0].Name, Is.EqualTo(_fileName));
-        Assert.That(response[0].FolderId, Is.EqualTo(_folderId));
+        response.Should().NotBeNull();
+        response.Count.Should().Be(1);
+        response[0].Id.Should().Be(_fileId);
+        response[0].Name.Should().Be(_fileName);
+        response[0].FolderId.Should().Be(_folderId);
     }
 
     [Test]
@@ -80,12 +140,14 @@ public class FileServiceUnitTests
         _mockedFileRepository.Setup(x => x.GetByNameAsync("SomeFile", _folderId, _cancellationToken))
             .ReturnsAsync([]);
         
+        var service = GetService();
+        
         // act
-        var response = await GetService().GetByNameAsync("SomeFile", _folderId, _cancellationToken);
+        var response = await service.GetByNameAsync("SomeFile", _folderId, _cancellationToken);
         
         // assert
-        Assert.That(response, Is.Not.Null);
-        Assert.That(response.Count, Is.EqualTo(0));
+        response.Should().NotBeNull();
+        response.Count.Should().Be(0);
     }
 
     [Test]
@@ -94,12 +156,19 @@ public class FileServiceUnitTests
         // arrange
         var searchString = "Test";
         _mockedFileRepository.Setup(x => x.SearchAsync(searchString, _cancellationToken))
-            .ReturnsAsync([new FileItem { Id = _fileId, Name = _fileName, FolderId = _folderId }]);
+            .ReturnsAsync([new File { Id = _fileId, Name = _fileName, FolderId = _folderId }]);
 
-        var response = await GetService().SearchAsync(searchString, _cancellationToken);
+        var service = GetService();
         
-        Assert.That(response, Is.Not.Null);
-        Assert.That(response.Count, Is.EqualTo(1));
+        // act
+        var response = await service.SearchAsync(searchString, _cancellationToken);
+        
+        // assert
+        response.Should().NotBeNull();
+        response.Count.Should().Be(1);
+        response[0].Id.Should().Be(_fileId);
+        response[0].Name.Should().Be(_fileName);
+        response[0].FolderId.Should().Be(_folderId);
     }
     
     [Test]
@@ -110,11 +179,45 @@ public class FileServiceUnitTests
         _mockedFileRepository.Setup(x => x.SearchAsync(searchString, _cancellationToken))
             .ReturnsAsync([]);
 
-        var response = await GetService().SearchAsync(searchString, _cancellationToken);
+        var service = GetService();
         
-        Assert.That(response, Is.Not.Null);
-        Assert.That(response.Count, Is.EqualTo(0));
+        // act
+        var response = await service.SearchAsync(searchString, _cancellationToken);
+        
+        // assert
+        response.Should().NotBeNull();
+        response.Count.Should().Be(0);
     }
     
-    // tests for delete file
+    [Test]
+    public async Task Delete_ShouldPass()
+    {
+        // arrange
+        var file = new File()
+        {
+            Id = _fileId,
+            Name = _fileName,
+            FolderId = _folderId
+        };
+        _mockedFileRepository.Setup(x => x.DeleteAsync(file, _cancellationToken))
+            .Returns(Task.CompletedTask);
+
+        var service = GetService();
+        
+        // act and assert
+        var act = async () => await service.DeleteAsync(_fileId, _cancellationToken);
+        await act.Should().NotThrowAsync();
+    }
+
+    [Test]
+    public async Task Delete_ShouldThrowKeyNotFoundException()
+    {
+        // arrange
+        var nonSetupGuid = Guid.NewGuid();
+        var service = GetService();
+        
+        // act and assert
+        var act = async () => await service.DeleteAsync(nonSetupGuid, _cancellationToken);
+        await act.Should().ThrowAsync<KeyNotFoundException>();
+    }
 }

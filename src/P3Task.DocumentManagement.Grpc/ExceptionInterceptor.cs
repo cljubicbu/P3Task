@@ -1,3 +1,4 @@
+using System.Data;
 using Grpc.Core;
 using Grpc.Core.Interceptors;
 
@@ -20,17 +21,23 @@ public class ExceptionInterceptor : Interceptor
         ServerCallContext context,
         UnaryServerMethod<TRequest, TResponse> continuation)
     {
-        // serilog - log context for correlation id
         try
         {
+            _logger.LogDebug("CorrelationId: {CorrelationId} - Invoking {Method} with {Request}", _correlationId, context.Method, request);
+
             return await continuation(request, context);
         }
         catch (Exception e)
         {
             _logger.LogError(e, "CorrelationId: {CorrelationId} - Exception occurred", _correlationId);
 
-            // handle exceptions
-            throw;
+            if (e is KeyNotFoundException)
+                throw new RpcException(new Status(StatusCode.NotFound, "Entry not found"));
+            else if (e is DuplicateNameException)
+                throw new RpcException(
+                    new Status(StatusCode.AlreadyExists,"File with same name in folder already exists"));
+            else
+                throw new RpcException(new Status(StatusCode.Internal, "Internal server error"));
         }
     }
 }

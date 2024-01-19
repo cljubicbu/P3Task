@@ -5,6 +5,6 @@ namespace P3Task.DocumentManagement.Core.Interfaces;
 public interface IFolderRepository
 {
     Task<Folder> CreateAsync(Folder folder, CancellationToken cancellationToken);
-    Task<Folder?> GetByIdAsync(Guid id, CancellationToken cancellationToken, bool includeChildFolders = false);
-    Task DeleteAsync(Guid id, CancellationToken cancellationToken);
+    Task<Folder?> GetByIdAsync(Guid id, CancellationToken cancellationToken, bool includeChildFolders = false, bool includeChildFiles = false);
+    Task DeleteAsync(Folder folder, CancellationToken cancellationToken);
 }

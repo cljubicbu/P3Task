@@ -1,5 +1,6 @@
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
+using P3Task.DocumentManagement.Application.Interfaces;
 using P3Task.DocumentManagement.Core.Entities;
 using P3Task.DocumentManagement.Core.Helpers;
 
@@ -7,10 +8,10 @@ namespace P3Task.DocumentManagement.Grpc.Services;
 
 public class FolderProtoService : FolderService.FolderServiceBase
 {
-    private readonly Application.Services.FolderService _folderService;
+    private readonly IFolderService _folderService;
 
     public FolderProtoService(
-        Application.Services.FolderService folderService)
+        IFolderService folderService)
     {
         _folderService = folderService;
     }
@@ -31,7 +32,7 @@ public class FolderProtoService : FolderService.FolderServiceBase
             {
                 Id = folder.Id.ToString(),
                 Name = folder.Name,
-                ParentFolderId = folder.ParentFolderId?.ToString()
+                ParentFolderId = folder.ParentFolderId?.ToString() ?? string.Empty
             }
         };
     }

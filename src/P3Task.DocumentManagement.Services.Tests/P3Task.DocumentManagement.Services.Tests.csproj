@@ -10,6 +10,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="FluentAssertions" Version="7.0.0-alpha.3" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.6.0"/>
         <PackageReference Include="Moq" Version="4.20.70" />
         <PackageReference Include="NUnit" Version="3.13.3"/>
@@ -19,7 +20,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\P3Task.DocumentManagement.Services\P3Task.DocumentManagement.Services.csproj" />
+      <ProjectReference Include="..\P3Task.DocumentManagement.Application\P3Task.DocumentManagement.Application.csproj" />
     </ItemGroup>
 
 </Project>

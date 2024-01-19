@@ -8,7 +8,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "P3Task.DocumentManagement.I
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{625C5FDF-6E57-4570-850E-8B615351E053}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "P3Task.DocumentManagement.Services", "P3Task.DocumentManagement.Services\P3Task.DocumentManagement.Services.csproj", "{BC5FE9F8-A1AC-454B-9FDF-16560213E61B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "P3Task.DocumentManagement.Application", "P3Task.DocumentManagement.Application\P3Task.DocumentManagement.Application.csproj", "{BC5FE9F8-A1AC-454B-9FDF-16560213E61B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain", "Domain", "{EE987E95-0186-4850-A543-194E04211F68}"
 EndProject

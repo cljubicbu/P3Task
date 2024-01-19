@@ -11,6 +11,6 @@ public class Folder
     public Guid? ParentFolderId { get; set; }
     public Folder? ParentFolder { get; set; }
 
-    public virtual List<FileItem>? Files { get; set; }
-    public virtual List<Folder>? Folders { get; set; }
+    public List<File>? Files { get; set; }
+    public List<Folder>? Folders { get; set; }
 }

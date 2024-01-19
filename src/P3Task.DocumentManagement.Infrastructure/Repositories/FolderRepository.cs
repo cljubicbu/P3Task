@@ -24,18 +24,21 @@ public class FolderRepository : IFolderRepository
         return folder;
     }
 
-    public async Task<Folder?> GetByIdAsync(Guid id, CancellationToken cancellationToken, bool includeChildFolders = false)
+    public async Task<Folder?> GetByIdAsync(Guid id, CancellationToken cancellationToken, bool includeChildFolders = false, bool includeChildFiles = false)
     {
-        return await _dbContext.Folders
-            .Include(x => x.Folders)
+        var foldersQuery = _dbContext.Folders.AsQueryable();
+        if (includeChildFolders)
+            foldersQuery = foldersQuery.Include(x => x.Folders);
+
+        if (includeChildFiles)
+            foldersQuery = foldersQuery.Include(x => x.Files);
+        
+        return await foldersQuery
             .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
     }
 
-    public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
+    public async Task DeleteAsync(Folder folder, CancellationToken cancellationToken)
     {
-        var folder = new Folder() { Id = id };
-
-        _dbContext.Folders.Attach(folder);
         _dbContext.Folders.Remove(folder);
 
         await _dbContext.SaveChangesAsync(cancellationToken);
