@@ -14,7 +14,7 @@ public class FolderRepository
         _dbContext = dbContext;
     }
 
-    public async Task<Folder> CreateFolderAsync(Folder folder, CancellationToken cancellationToken)
+    public async Task<Folder> CreateAsync(Folder folder, CancellationToken cancellationToken)
     {
         _dbContext.Add(folder);
 
@@ -23,14 +23,11 @@ public class FolderRepository
         return folder;
     }
 
-    public async Task<Folder> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+    public async Task<Folder?> GetByIdAsync(Guid id, CancellationToken cancellationToken, bool includeChildFolders = false)
     {
-        var folder = await _dbContext.Folders.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
-
-        if (folder is null)
-            throw new KeyNotFoundException();
-
-        return folder;
+        return await _dbContext.Folders
+            .Include(x => x.Folders)
+            .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
     }
 
     public async Task DeleteFolderAsync(Guid id, CancellationToken cancellationToken)

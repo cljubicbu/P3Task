@@ -1,17 +1,59 @@
 syntax = "proto3";
 
+import "google/protobuf/empty.proto";
+
 option csharp_namespace = "P3Task.DocumentManagement.Grpc";
 
 package file;
 
+// file service definition
 service FileService {
   rpc CreateFile (CreateFileRequest) returns (CreateFileResponse);
+  rpc GetFilesByName (GetFilesByNameRequest) returns (GetFilesByNameResponse);
+  rpc SearchFiles (SearchFilesRequest) returns (SearchFilesResponse);
+  rpc DeleteFile (DeleteFileRequest) returns (google.protobuf.Empty);
 }
 
-message CreateFileRequest{
+// request message for creating a file
+message CreateFileRequest {
   string name = 1;
+  string folder_id = 2;
 }
 
-message CreateFileResponse{
+// response message containing the created file
+message CreateFileResponse {
+  File file = 1;
+}
+
+// request message for searching all files or within a specific folder by exact name
+message GetFilesByNameRequest {
+  string name = 1;
+  string folder_id = 2;
+}
+
+// response message containing list of files that match search criteria
+message GetFilesByNameResponse {
+  repeated File Files = 1;
+}
+
+// request message for searching files by name using "starts with" logic
+message SearchFilesRequest {
+  string name = 1;  
+}
+
+// response message containing list of files that match search criteria
+message SearchFilesResponse {
+  repeated File Files = 1;
+}
+
+// request message for deleting a file by id
+message DeleteFileRequest {
   string id = 1;
+}
+
+// definition of file that is used in response messages
+message File {
+  string id = 1;
+  string name = 2;
+  string folder_id = 3;
 }

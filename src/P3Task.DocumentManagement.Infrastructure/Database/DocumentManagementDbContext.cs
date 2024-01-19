@@ -1,24 +1,16 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using P3Task.DocumentManagement.Core.Entities;
 
 namespace P3Task.DocumentManagement.Repository.Database;
 
 public class DocumentManagementDbContext : DbContext
 {
-    private readonly ILogger _logger;
-    
     public DocumentManagementDbContext(
-        ILogger<DocumentManagementDbContext> logger)
+        DbContextOptions<DocumentManagementDbContext> options)
+        : base(options)
     {
-        _logger = logger;
     }
 
-    public DbSet<FileItem> Files { get; set; }
-    public DbSet<Folder> Folders { get; set; }
-    
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        base.OnModelCreating(modelBuilder);
-    }
+    public DbSet<FileItem> Files { get; set; } = null!;
+    public DbSet<Folder> Folders { get; set; } = null!;
 }

@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+option csharp_namespace = "P3Task.DocumentManagement.Grpc";
+
+package folder;
+
+// folder service definition
+service FolderService {
+  rpc CreateFolder (CreateFolderRequest) returns (CreateFolderResponse);
+  rpc DeleteFolder (DeleteFolderRequest) returns (google.protobuf.Empty);
+}
+
+// request message for creating a folder
+message CreateFolderRequest {
+  string name = 1;
+  string parent_folder_id = 2;
+}
+
+// response message containing the created folder
+message CreateFolderResponse {
+  Folder folder = 1;
+}
+
+// request message for deleting a folder by id
+message DeleteFolderRequest {
+  string id = 1;
+}
+
+// definition of folder used in response messages
+message Folder {
+  string id = 1;
+  string name = 2;
+  string parent_folder_id = 3;
+}

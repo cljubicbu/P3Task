@@ -31,8 +31,8 @@ public class FileRepository
     public async Task<List<FileItem>> GetByNameAsync(string name, Guid? folderId, CancellationToken cancellationToken)
     {
         var filesQuery = _dbContext.Files.Where(x => x.Name == name);
-        
-        
+
+
         if (folderId is not null)
             filesQuery = filesQuery.Where(x => x.FolderId == folderId);
 
@@ -46,7 +46,7 @@ public class FileRepository
 
     public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
     {
-        var file = new FileItem() { Id = id };
+        var file = new FileItem { Id = id };
         _dbContext.Files.Attach(file);
         _dbContext.Files.Remove(file);
 
